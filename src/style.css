@@ -147,6 +147,10 @@ h3 {
 .text-link:hover {
   gap: 15px;
 }
+.hero .actions .text-link:hover > svg,
+.hero .actions .text-link:focus-visible > svg {
+  animation: arrow-down-nudge 0.26s ease;
+}
 .actions {
   display: flex;
   align-items: center;
@@ -410,6 +414,9 @@ nav > .button {
 }
 .radar-chip > svg {
   color: #967200;
+}
+.radar-chip:hover > svg {
+  animation: radio-pulse 0.4s ease;
 }
 .stage-caption {
   position: absolute;
@@ -1166,9 +1173,25 @@ nav > .button {
   cursor: pointer;
   padding: 25px 0;
   list-style: none;
+  transition: background-color 0.2s;
+}
+.release-list summary:hover,
+.release-list summary:focus-visible {
+  background: #f3f1e8;
 }
 .release-list summary > svg {
   transition: transform 0.2s;
+}
+.release-list details:not([open]) summary:hover > svg,
+.release-list details:not([open]) summary:focus-visible > svg {
+  transform: translateX(3px);
+}
+.release-list summary:hover .timeline-dot,
+.release-list summary:focus-visible .timeline-dot {
+  border-color: var(--yellow);
+  background: #ffc10740;
+  box-shadow: 0 0 0 3px #ffc10724;
+  transform: scale(1.15);
 }
 .release-list summary::-webkit-details-marker {
   display: none;
@@ -1178,6 +1201,11 @@ nav > .button {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 .history-title {
   display: flex;
@@ -1228,6 +1256,13 @@ nav > .button {
 .code-heading .text-link {
   color: var(--yellow);
 }
+.code-heading .text-link > svg {
+  transition: transform 0.2s;
+}
+.code-heading .text-link:hover > svg,
+.code-heading .text-link:focus-visible > svg {
+  transform: translate(2px, -2px);
+}
 .repo-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1241,13 +1276,28 @@ nav > .button {
   border: 1px solid #4b5547;
   border-radius: 16px;
   align-items: center;
-  transition: border 0.2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
 }
-.repo-links > a:hover {
+.repo-links > a:hover,
+.repo-links > a:focus-visible {
   border-color: var(--yellow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px #00000026;
+}
+.repo-links > a:hover > svg:first-child,
+.repo-links > a:focus-visible > svg:first-child {
+  animation: icon-nudge 0.4s ease;
 }
 .repo-links > a > svg:last-child {
   margin-left: auto;
+  transition: transform 0.2s;
+}
+.repo-links > a:hover > svg:last-child,
+.repo-links > a:focus-visible > svg:last-child {
+  transform: translate(3px, -3px);
 }
 .repo-links small {
   font-size: 0.5625rem;
@@ -1282,6 +1332,18 @@ nav > .button {
   display: flex;
   gap: 10px;
   font-size: 0.75rem;
+  transition: color 0.2s;
+}
+.footer-top > a:not(.brand) > svg {
+  transition: transform 0.2s;
+}
+.footer-top > a:not(.brand):hover,
+.footer-top > a:not(.brand):focus-visible {
+  color: #8a6500;
+}
+.footer-top > a:not(.brand):hover > svg,
+.footer-top > a:not(.brand):focus-visible > svg {
+  transform: translate(2px, -2px);
 }
 .footer-bottom {
   display: flex;
@@ -1938,6 +2000,14 @@ nav > .button {
     animation: none !important;
     transition: none !important;
   }
+  .hero .actions .text-link > svg,
+  .code-heading .text-link > svg,
+  .footer-top > a:not(.brand) > svg,
+  .repo-links > a,
+  .repo-links > a > svg:last-child,
+  .timeline-dot {
+    transform: none !important;
+  }
 }
 /* Clip only the decorative route before it reaches the tablet viewport edge. */
 @media (min-width: 561px) and (max-width: 800px) {
@@ -2269,6 +2339,14 @@ select:focus-visible {
 :root[data-theme="dark"] .tag {
   border-color: #6b7667;
 }
+:root[data-theme="dark"] .release-list summary:hover,
+:root[data-theme="dark"] .release-list summary:focus-visible {
+  background: var(--surface);
+}
+:root[data-theme="dark"] .footer-top > a:not(.brand):hover,
+:root[data-theme="dark"] .footer-top > a:not(.brand):focus-visible {
+  color: var(--yellow);
+}
 :root[data-theme="dark"] .icon-tile {
   color: #604900;
 }
@@ -2314,8 +2392,21 @@ select:focus-visible {
     transform: rotate(10deg);
   }
 }
-.arrival:hover .animate-pin,
-.arrival:focus-within .animate-pin,
+@keyframes arrow-down-nudge {
+  50% {
+    transform: translateY(4px);
+  }
+}
+@keyframes pin-nudge {
+  50% {
+    transform: translateY(3px);
+  }
+}
+@keyframes radio-pulse {
+  50% {
+    transform: scale(1.1);
+  }
+}
 .editorial-next:hover .animate-route,
 .profile-visions article:hover .animate-profile,
 .button:hover > svg:first-child,
@@ -2327,6 +2418,10 @@ select:focus-visible {
 .theme-trigger:hover .animated-icon,
 .theme-trigger:focus-visible .animated-icon {
   animation: icon-nudge 0.5s ease 1;
+}
+.arrival:hover .animate-pin,
+.arrival:focus-within .animate-pin {
+  animation: pin-nudge 0.32s ease;
 }
 .notification-stack:hover .animate-bell {
   animation: bell-tilt 0.5s ease 1;
@@ -2340,6 +2435,14 @@ select:focus-visible {
   animation: none !important;
   transition: none !important;
   scroll-behavior: auto !important;
+}
+:root[data-motion="reduce"] .hero .actions .text-link > svg,
+:root[data-motion="reduce"] .code-heading .text-link > svg,
+:root[data-motion="reduce"] .footer-top > a:not(.brand) > svg,
+:root[data-motion="reduce"] .repo-links > a,
+:root[data-motion="reduce"] .repo-links > a > svg:last-child,
+:root[data-motion="reduce"] .timeline-dot {
+  transform: none !important;
 }
 @media (min-width: 1001px) {
   nav {
