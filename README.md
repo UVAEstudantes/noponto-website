@@ -69,13 +69,23 @@ Testes focados em seleção por publicação, ausência de APK, beta, nomes seme
 
 ### Inventário observado em 16/11/2026
 
-| Tag existente | APK publicado |
-| --- | --- |
-| `v5.3-beta` | `NoPonto.apk` |
-| `noponto-v5.3-beta` | `NoPonto.apk` |
+| Tag existente          | APK publicado                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------ |
+| `v5.3-beta`            | `NoPonto.apk`                                                                        |
+| `noponto-v5.3-beta`    | `NoPonto.apk`                                                                        |
 | `onboarding-v1.0-beta` | `NoPonto-Release-feature-onboarding-interativo-3062d55646de-20261113-161406-985.apk` |
-| `radar-v5.3-beta` | `app-release.apk` |
-| `radar-v5.2-beta` | `app-release.apk` |
-| `radar-v5.1-beta` | `app-release.apk` |
+| `radar-v5.3-beta`      | `app-release.apk`                                                                    |
+| `radar-v5.2-beta`      | `app-release.apk`                                                                    |
+| `radar-v5.1-beta`      | `app-release.apk`                                                                    |
 
 Há prefixos e esquemas de versão misturados; os nomes públicos não identificam sempre o APK, e Beta consta no texto sem prerelease. Se desejado futuramente, títulos e descrições podem ser revisados mantendo tags e assets intactos. Renomear ou excluir tags/assets rompe URLs: preservar os antigos e adotar o padrão recomendado nas próximas publicações. Este inventário é somente recomendação; as releases não foram alteradas.
+
+## V2 em revisão
+
+A branch `feat/website-v2-refinamentos` preserva a composição original e acrescenta seções editoriais de Rotinas e Perfil. O conteúdo foi conferido em `noponto-frontend/NoPonto/src/services/rotinasDemo.ts` e `features/perfil/perfilLocal.ts`: configuração local e etapas ilustrativas de Rotinas; perfil local com nome/cor/iniciais e favoritos. Histórico, estatísticas, retrospectivas e comunidade são visão futura, não coleta já implementada.
+
+O botão de ajustes no header abre um diálogo nativo acessível. Aparência: claro, escuro ou sistema (padrão, acompanha mudanças ao vivo). Movimento: sistema ou redução manual. Texto: padrão, maior e muito maior. `Restaurar padrão` retorna às preferências do sistema. Seleções ficam em `noponto-site-preferences`, apenas neste navegador/site; armazenamento bloqueado não impede uso. O script inicial em `index.html` aplica as preferências antes da renderização; `src/preferences.ts` valida os valores e `src/SitePreferences.tsx` acompanha mudanças do sistema. Não afeta o Android. O QR mantém fundo branco nos dois temas.
+
+Os ícones dos modais são distintos: ônibus e trem Lucide; BRT articulado e metrô com túnel em SVG próprio. Microanimações curtas aparecem somente ao interagir com localização, sino do Radar, trajeto, perfil e download. Tanto o sistema quanto a preferência manual removem movimentos decorativos. Alto contraste adicional não foi introduzido; os dois temas têm foco e contraste próprios.
+
+Validação V2: `npm test` (17 casos), `npm run build`, Edge/Playwright nas larguras 360/390/768/1440 nos dois temas, maior tamanho de texto nas quatro larguras, persistência após recarga, mudanças de sistema ao vivo, restauração, menu mobile e galeria/Escape. Capturas comparativas locais `qa-before-*.png`, `qa-v2-light-*.png`, `qa-v2-dark-*.png` e `qa-v2-large-*.png` são ignoradas pelo Git. Para visualizar: `npm ci`, `npm run dev`, abra a URL informada e use o botão de ajustes. O workflow continua restrito a push na main; esta branch não substitui a publicação antes do merge aprovado.
