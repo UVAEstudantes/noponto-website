@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://uvaestudantes.github.io/noponto-website/sitemap.xml
