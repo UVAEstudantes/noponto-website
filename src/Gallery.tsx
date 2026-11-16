@@ -56,6 +56,7 @@ export function Gallery() {
       <dialog
         ref={dialog}
         className="lightbox"
+        aria-label="Galeria de telas do aplicativo"
         onClick={(e) => {
           if (e.target === e.currentTarget) dialog.current?.close();
         }}

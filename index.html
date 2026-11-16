@@ -3,6 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (() => {
+        let p = {};
+        try {
+          p =
+            JSON.parse(localStorage.getItem("noponto-site-preferences")) || {};
+        } catch {}
+        const r = document.documentElement;
+        r.dataset.theme = ["light", "dark"].includes(p.theme)
+          ? p.theme
+          : matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        r.dataset.motion =
+          p.motion === "reduce" ||
+          matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "reduce"
+            : "full";
+        r.dataset.text = ["large", "larger"].includes(p.text)
+          ? p.text
+          : "standard";
+      })();
+    </script>
     <meta name="theme-color" content="#FFC107" />
     <title>NoPonto — O transporte do Rio, mais perto de você</title>
     <meta

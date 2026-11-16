@@ -50,23 +50,15 @@ export const screenshots = [
 ] as const;
 export const future = [
   [
-    "Planejamento de rotas",
-    "Da origem ao destino, com caminhada, embarques e integrações.",
-  ],
-  [
-    "Rotinas inteligentes",
-    "Orientações e avisos nos seus deslocamentos habituais. Hoje, uma prévia demonstrativa.",
-  ],
-  [
     "Mais acessibilidade",
-    "Evoluir os recursos de voz e oferecer interfaces mais simples.",
-  ],
-  [
-    "Sua mobilidade em perspectiva",
-    "Histórico real e retrospectivas pessoais. As estatísticas atuais são ilustrativas.",
+    "Evoluir os recursos de voz e oferecer interfaces mais simples para diferentes necessidades.",
   ],
   [
     "Uma cidade que colabora",
-    "Informações da comunidade sobre linhas, paradas e estações.",
+    "Estudar informações da comunidade sobre linhas, paradas e estações, com cuidado na validação dos relatos.",
+  ],
+  [
+    "Mais caminhos possíveis",
+    "Explorar alternativas de trajetos e novas integrações conforme a disponibilidade das fontes. São propostas, sem datas prometidas.",
   ],
 ];
