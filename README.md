@@ -66,3 +66,16 @@ Hoje há duas publicações v5.3 Beta com tags diferentes, nomes de APK variados
 ## Validação
 
 Testes focados em seleção por publicação, ausência de APK, beta, nomes semelhantes, nome variável, resposta vazia/malformada, URLs inválidas, múltiplos APKs, falhas de rede/rate limit, cache e sincronização do QR com download. Build TypeScript + Vite valida caminhos do subdiretório. Layout com pontos de ajuste para celular, tablet e desktop; menu por teclado, diálogo nativo com Escape, foco visível e alternativas textuais ao QR.
+
+### Inventário observado em 16/11/2026
+
+| Tag existente | APK publicado |
+| --- | --- |
+| `v5.3-beta` | `NoPonto.apk` |
+| `noponto-v5.3-beta` | `NoPonto.apk` |
+| `onboarding-v1.0-beta` | `NoPonto-Release-feature-onboarding-interativo-3062d55646de-20261113-161406-985.apk` |
+| `radar-v5.3-beta` | `app-release.apk` |
+| `radar-v5.2-beta` | `app-release.apk` |
+| `radar-v5.1-beta` | `app-release.apk` |
+
+Há prefixos e esquemas de versão misturados; os nomes públicos não identificam sempre o APK, e Beta consta no texto sem prerelease. Se desejado futuramente, títulos e descrições podem ser revisados mantendo tags e assets intactos. Renomear ou excluir tags/assets rompe URLs: preservar os antigos e adotar o padrão recomendado nas próximas publicações. Este inventário é somente recomendação; as releases não foram alteradas.

@@ -2,3 +2,4 @@ node_modules/
 dist/
 *.tsbuildinfo
 contact.png
+qa-*.png

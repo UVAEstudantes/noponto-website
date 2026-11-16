@@ -1765,3 +1765,5 @@ nav > .button {
     transition: none !important;
   }
 }
+/* Clip only the decorative route before it reaches the tablet viewport edge. */
+@media (min-width:561px) and (max-width:800px){.hero-stage .route-art{left:-15px;width:calc(100% + 30px)}}
