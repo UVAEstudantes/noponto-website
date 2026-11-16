@@ -101,6 +101,12 @@ h3 {
   border-radius: 50%;
   background: var(--yellow);
 }
+.animated-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
 .button {
   display: inline-flex;
   align-items: center;
@@ -114,11 +120,17 @@ h3 {
   min-height: 52px;
   transition:
     transform 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    background-color 0.2s,
+    color 0.2s;
 }
 .button:hover {
   transform: translateY(-3px);
   box-shadow: 0 7px 0 #20231f20;
+}
+.button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #20231f14;
 }
 .button.secondary {
   background: #eeeae0;
@@ -130,6 +142,7 @@ h3 {
   font-size: 0.875rem;
   font-weight: 650;
   padding: 14px 0;
+  transition: gap 0.2s;
 }
 .text-link:hover {
   gap: 15px;
@@ -196,6 +209,19 @@ nav > .button {
   background: none;
   border: 0;
   padding: 12px;
+}
+.menu svg {
+  animation: menu-icon-in 0.2s ease-out;
+  transition: transform 0.2s;
+}
+.menu[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+.menu:hover svg {
+  transform: scale(1.06);
+}
+.menu[aria-expanded="true"]:hover svg {
+  transform: rotate(90deg) scale(1.06);
 }
 .hero {
   display: grid;
@@ -674,7 +700,9 @@ nav > .button {
   position: relative;
   height: 435px;
   overflow: hidden;
-  transition: background 0.2s;
+  transition:
+    background 0.2s,
+    box-shadow 0.25s;
 }
 .gallery-image img {
   border-radius: 13px;
@@ -684,8 +712,20 @@ nav > .button {
   object-fit: cover;
   object-position: top;
 }
-.gallery-item:hover .gallery-image {
+.gallery-item:hover .gallery-image,
+.gallery-item:focus-visible .gallery-image {
   background: #ffe28a;
+}
+.gallery-item:focus-visible {
+  outline: none;
+}
+.gallery-item:focus-visible .gallery-image {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.gallery-item:hover .gallery-image > span,
+.gallery-item:focus-visible .gallery-image > span {
+  animation: icon-pop 0.4s ease 1;
 }
 .gallery-image > span {
   position: absolute;
@@ -729,6 +769,84 @@ nav > .button {
   color: #72796c;
   padding-top: 14px;
 }
+.gallery-preview {
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  animation: preview-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.gallery-preview.closing {
+  animation: preview-out 0.16s ease-in both;
+}
+.gallery-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  border: 1px solid #ffffff80;
+  box-shadow: 0 24px 60px #10181055;
+  background: var(--surface);
+}
+.gallery-preview-hint {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #fffefa;
+  color: #20231f;
+  padding: 7px 10px;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  box-shadow: 0 5px 16px #0003;
+}
+@keyframes preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes preview-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+@keyframes icon-pop {
+  50% {
+    transform: scale(1.16) rotate(4deg);
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes menu-icon-in {
+  from {
+    opacity: 0;
+    transform: scale(0.75) rotate(-20deg);
+  }
+}
 .lightbox {
   border: 0;
   border-radius: 18px;
@@ -736,6 +854,12 @@ nav > .button {
   max-width: min(700px, 95vw);
   max-height: 94vh;
   background: var(--page);
+}
+.lightbox[open] {
+  animation: dialog-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.lightbox[open]::backdrop {
+  animation: backdrop-in 0.2s ease-out;
 }
 .lightbox::backdrop {
   background: #101810dd;
@@ -1026,6 +1150,9 @@ nav > .button {
   padding: 25px 0;
   list-style: none;
 }
+.release-list summary > svg {
+  transition: transform 0.2s;
+}
 .release-list summary::-webkit-details-marker {
   display: none;
 }
@@ -1264,6 +1391,7 @@ nav > .button {
     align-items: stretch;
     flex-direction: column;
     gap: 0;
+    animation: menu-in 0.18s ease-out;
   }
   nav > a:not(.button) {
     padding: 14px 0;
@@ -2060,6 +2188,17 @@ select:focus-visible {
 :root[data-theme="dark"] .gallery-image {
   background: #30392f;
 }
+:root[data-theme="dark"] .gallery-item:hover .gallery-image,
+:root[data-theme="dark"] .gallery-item:focus-visible .gallery-image {
+  background: #4b4c36;
+}
+:root[data-theme="dark"] .gallery-preview img {
+  border-color: #ffffff1f;
+}
+:root[data-theme="dark"] .gallery-preview-hint {
+  background: var(--raised);
+  color: var(--ink);
+}
 :root[data-theme="dark"] .button.secondary {
   background: #364034;
   color: var(--ink);
@@ -2135,7 +2274,11 @@ select:focus-visible {
 .editorial-next:hover .animate-route,
 .profile-visions article:hover .animate-profile,
 .button:hover > svg:first-child,
-.button:focus-visible > svg:first-child {
+.button:hover > .animated-icon,
+.button:focus-visible > svg:first-child,
+.button:focus-visible > .animated-icon,
+.preferences-trigger:hover .animated-icon,
+.preferences-trigger:focus-visible .animated-icon {
   animation: icon-nudge 0.5s ease 1;
 }
 .notification-stack:hover .animate-bell {

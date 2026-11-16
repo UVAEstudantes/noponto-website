@@ -16,10 +16,12 @@ export function BrtIcon({
       aria-hidden="true"
       {...props}
     >
-      <path d="M2 16V7a2 2 0 0 1 2-2h5v11H2Zm10 0V5h8a2 2 0 0 1 2 2v9H12ZM9 7h3m-3 3h3m-3 3h3M3 9h4m8 0h5M2 13h5m8 0h7" />
-      <circle cx="5" cy="17" r="2" />
-      <circle cx="18" cy="17" r="2" />
-      <path d="M1 22h22" />
+      <path d="M2.5 16V7.5A2.5 2.5 0 0 1 5 5h14a2.5 2.5 0 0 1 2.5 2.5V16h-19Z" />
+      <path d="M4.5 8.5h4.2v2.7H4.5zm9.5 0h2.5v2.7H14zm3.4 0h2.1v2.7h-2.1z" />
+      <path d="M10 6v8.5m1.8-8.5v8.5" />
+      <path d="M4.5 13.5h3.2m10.8 0h1" />
+      <circle cx="6.5" cy="17.5" r="2" />
+      <circle cx="17.5" cy="17.5" r="2" />
     </svg>
   );
 }

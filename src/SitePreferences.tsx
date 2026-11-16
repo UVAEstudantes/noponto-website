@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Settings2, X } from "lucide-react";
+import settingsAnimation from "react-useanimations/lib/settings";
+import { AnimatedIcon } from "./AnimatedIcon";
 import {
   applyPreferences,
   defaults,
@@ -50,7 +52,12 @@ export function Preferences() {
         aria-label="Personalizar aparência e acessibilidade"
         onClick={() => dialog.current?.showModal()}
       >
-        <Settings2 size={20} />
+        <AnimatedIcon
+          animation={settingsAnimation}
+          interaction="hover"
+          size={20}
+          fallback={<Settings2 size={20} />}
+        />
       </button>
       <dialog
         className="preferences-dialog"

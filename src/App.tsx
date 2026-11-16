@@ -5,6 +5,8 @@ import { Gallery } from "./Gallery";
 import { HeroMedia } from "./HeroMedia";
 import { DownloadPanel, History } from "./Downloads";
 import { DownloadLink, Eyebrow } from "./ui";
+import { AnimatedIcon } from "./AnimatedIcon";
+import notificationAnimation from "react-useanimations/lib/notification";
 import { useState, useRef } from "react";
 import {
   ArrowDown,
@@ -367,8 +369,14 @@ function Radar() {
           </div>
           <div className="notification-stack">
             <span className="notification-label">
-              <BellRing className="animate-bell" size={16} /> O AVISO CHEGA ATÉ
-              VOCÊ
+              <AnimatedIcon
+                animation={notificationAnimation}
+                className="animate-bell"
+                interaction="hover-replay"
+                size={16}
+                fallback={<BellRing size={16} />}
+              />{" "}
+              O AVISO CHEGA ATÉ VOCÊ
             </span>
             <img
               src={asset("011.webp")}

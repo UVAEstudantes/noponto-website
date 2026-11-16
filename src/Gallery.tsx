@@ -1,10 +1,79 @@
-import { useState, useRef } from "react";
-import { ArrowUpRight, ArrowRight, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { ArrowRight, Maximize2, X } from "lucide-react";
+import maximize2 from "react-useanimations/lib/maximize2";
+import { AnimatedIcon } from "./AnimatedIcon";
 import { asset, screenshots } from "./content";
 import { Eyebrow } from "./ui";
+import { placePreview } from "./galleryLayout";
+
+type Preview = ReturnType<typeof placePreview> & {
+  index: number;
+  closing: boolean;
+};
+
 export function Gallery() {
   const [selected, setSelected] = useState(0);
+  const [preview, setPreview] = useState<Preview | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
+  const closeTimer = useRef<number | undefined>(undefined);
+
+  const dismissPreview = useCallback(() => {
+    window.clearTimeout(closeTimer.current);
+    setPreview(null);
+  }, []);
+
+  const closePreview = useCallback(() => {
+    window.clearTimeout(closeTimer.current);
+    setPreview((current) =>
+      current && !current.closing ? { ...current, closing: true } : current,
+    );
+    closeTimer.current = window.setTimeout(() => setPreview(null), 170);
+  }, []);
+
+  useEffect(() => {
+    if (!preview) return;
+    const hide = () => closePreview();
+    window.addEventListener("scroll", hide, true);
+    window.addEventListener("resize", hide);
+    return () => {
+      window.removeEventListener("scroll", hide, true);
+      window.removeEventListener("resize", hide);
+    };
+  }, [preview, closePreview]);
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  const openPreview = (
+    event: React.PointerEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    if (
+      event.pointerType !== "mouse" ||
+      document.documentElement.dataset.motion === "reduce"
+    )
+      return;
+    const image = event.currentTarget.querySelector<HTMLElement>(
+      ".gallery-image",
+    );
+    if (!image) return;
+    const id = screenshots[index][0];
+    // shortcut: only 011/012 are wide; use naturalWidth if more wide shots arrive.
+    const ratio =
+      id === "011" ? 260 / 1080 : id === "012" ? 650 / 1080 : 1200 / 540;
+    const rect = image.getBoundingClientRect();
+    window.clearTimeout(closeTimer.current);
+    setPreview({
+      index,
+      closing: false,
+      ...placePreview(
+        { top: rect.top, bottom: rect.bottom, left: rect.left, width: rect.width },
+        { width: window.innerWidth, height: window.innerHeight },
+        ratio,
+      ),
+    });
+  };
+
   return (
     <section id="aplicativo" className="gallery wrap">
       <div className="gallery-heading">
@@ -23,7 +92,12 @@ export function Gallery() {
           <button
             className={`gallery-item ${Number(id) > 10 ? "wide-shot" : ""}`}
             key={id}
+            onPointerEnter={(event) => openPreview(event, i)}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse") closePreview();
+            }}
             onClick={() => {
+              dismissPreview();
               setSelected(i);
               dialog.current?.showModal();
             }}
@@ -38,7 +112,12 @@ export function Gallery() {
                 alt={description}
               />
               <span>
-                <ArrowUpRight size={20} />
+                <AnimatedIcon
+                  animation={maximize2}
+                  interaction="hover-replay"
+                  size={20}
+                  fallback={<Maximize2 size={20} />}
+                />
               </span>
             </div>
             <span className="gallery-index">
@@ -53,6 +132,28 @@ export function Gallery() {
         <span>DESLIZE PARA EXPLORAR</span>
         <ArrowRight size={20} />
       </div>
+      {preview &&
+        createPortal(
+          <div
+            className={`gallery-preview ${preview.closing ? "closing" : ""}`}
+            style={{
+              left: preview.left,
+              top: preview.top,
+              width: preview.width,
+            }}
+            aria-hidden="true"
+          >
+            <img
+              src={asset(`${screenshots[preview.index][0]}.webp`)}
+              alt=""
+              draggable={false}
+            />
+            <span className="gallery-preview-hint">
+              <Maximize2 size={13} /> AMPLIAR
+            </span>
+          </div>,
+          document.body,
+        )}
       <dialog
         ref={dialog}
         className="lightbox"

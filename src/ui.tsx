@@ -1,4 +1,6 @@
 import { Download, ArrowUpRight } from "lucide-react";
+import downloadAnimation from "react-useanimations/lib/download";
+import { AnimatedIcon } from "./AnimatedIcon";
 import type { Release } from "./releases";
 export function DownloadLink({
   release,
@@ -9,7 +11,12 @@ export function DownloadLink({
 }) {
   return (
     <a className={className} href={release?.apk.url || "#download"}>
-      <Download size={18} />
+      <AnimatedIcon
+        animation={downloadAnimation}
+        interaction="hover"
+        size={18}
+        fallback={<Download size={18} />}
+      />
       Baixar para Android
       <ArrowUpRight size={17} />
     </a>
