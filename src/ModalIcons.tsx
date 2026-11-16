@@ -17,9 +17,8 @@ export function BrtIcon({
       {...props}
     >
       <path d="M2.5 16V7.5A2.5 2.5 0 0 1 5 5h14a2.5 2.5 0 0 1 2.5 2.5V16h-19Z" />
-      <path d="M4.5 8.5h4.2v2.7H4.5zm9.5 0h2.5v2.7H14zm3.4 0h2.1v2.7h-2.1z" />
+      <path d="M4.5 8.3h4.8v3.4H4.5zm9.7 0h4.8v3.4h-4.8z" fill="currentColor" stroke="none" />
       <path d="M10 6v8.5m1.8-8.5v8.5" />
-      <path d="M4.5 13.5h3.2m10.8 0h1" />
       <circle cx="6.5" cy="17.5" r="2" />
       <circle cx="17.5" cy="17.5" r="2" />
     </svg>
