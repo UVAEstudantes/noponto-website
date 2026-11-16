@@ -294,6 +294,13 @@ nav > .button {
   aspect-ratio: 540/1200;
   object-fit: cover;
 }
+.phone video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .hero-phone {
   transform: rotate(7deg);
 }

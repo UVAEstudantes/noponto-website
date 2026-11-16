@@ -2,6 +2,7 @@ import { Preferences } from "./SitePreferences";
 import { Routines, Profile } from "./Editorial";
 import { BrtIcon, MetroIcon } from "./ModalIcons";
 import { Gallery } from "./Gallery";
+import { HeroMedia } from "./HeroMedia";
 import { DownloadPanel, History } from "./Downloads";
 import { DownloadLink, Eyebrow } from "./ui";
 import { useState, useRef } from "react";
@@ -152,11 +153,7 @@ function Hero({ release }: { release?: Release }) {
           <span className="live-dot" /> Seu próximo movimento começa aqui.
         </div>
         <div className="hero-phone">
-          <Phone
-            id="004"
-            alt="Mapa real do NoPonto com itinerários e veículos no Rio"
-            priority
-          />
+          <HeroMedia />
         </div>
         <div className="floating arrival">
           <span className="icon-tile">
