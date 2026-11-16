@@ -6,6 +6,10 @@ export const links = {
 };
 export const asset = (name: string) =>
   `${import.meta.env.BASE_URL}images/${name}`;
+export const heroMedia = {
+  light: { video: "hero-light.mp4", image: "imgPrincipalLight.jpeg" },
+  dark: { video: "hero-dark.mp4", image: "imgPrincipalDark.jpeg" },
+} as const;
 export const screenshots = [
   [
     "004",
