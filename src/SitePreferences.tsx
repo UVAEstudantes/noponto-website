@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Settings2, X } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Moon, Settings2, Sun, X } from "lucide-react";
+import settingsAnimation from "react-useanimations/lib/settings";
+import moonAnimation from "react-useanimations/lib/moon";
+import sunAnimation from "react-useanimations/lib/sun";
+import { AnimatedHover } from "./AnimatedIcon";
 import {
   applyPreferences,
   defaults,
@@ -7,9 +11,24 @@ import {
   savePreferences,
   type Preferences as Values,
 } from "./preferences";
+
+function subscribeTheme(callback: () => void) {
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
+}
+
 export function Preferences() {
   const [value, setValue] = useState(readPreferences);
   const dialog = useRef<HTMLDialogElement>(null);
+  const dark = useSyncExternalStore(
+    subscribeTheme,
+    () => document.documentElement.dataset.theme === "dark",
+    () => false,
+  );
   useEffect(() => {
     const dark = matchMedia("(prefers-color-scheme: dark)"),
       motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -43,15 +62,50 @@ export function Preferences() {
       </select>
     </label>
   );
+  const toggleTheme = () =>
+    setValue((current) => ({
+      ...current,
+      theme: dark ? "light" : "dark",
+    }));
   return (
     <>
-      <button
-        className="preferences-trigger"
-        aria-label="Personalizar aparência e acessibilidade"
-        onClick={() => dialog.current?.showModal()}
-      >
-        <Settings2 size={20} />
-      </button>
+      <div className="preferences-actions">
+        <AnimatedHover
+          animation={dark ? sunAnimation : moonAnimation}
+          interaction="hover-replay"
+          size={20}
+          fallback={dark ? <Sun size={20} /> : <Moon size={20} />}
+        >
+          {(icon, eventProps) => (
+            <button
+              {...eventProps}
+              className="theme-trigger"
+              aria-label={dark ? "Ativar tema claro" : "Ativar tema escuro"}
+              title={dark ? "Ativar tema claro" : "Ativar tema escuro"}
+              onClick={toggleTheme}
+            >
+              {icon}
+            </button>
+          )}
+        </AnimatedHover>
+        <AnimatedHover
+          animation={settingsAnimation}
+          interaction="hover"
+          size={20}
+          fallback={<Settings2 size={20} />}
+        >
+          {(icon, eventProps) => (
+            <button
+              {...eventProps}
+              className="preferences-trigger"
+              aria-label="Personalizar aparência e acessibilidade"
+              onClick={() => dialog.current?.showModal()}
+            >
+              {icon}
+            </button>
+          )}
+        </AnimatedHover>
+      </div>
       <dialog
         className="preferences-dialog"
         ref={dialog}

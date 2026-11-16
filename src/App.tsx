@@ -1,10 +1,13 @@
 import { Preferences } from "./SitePreferences";
 import { Routines, Profile } from "./Editorial";
-import { BrtIcon, MetroIcon } from "./ModalIcons";
+import { MetroIcon } from "./ModalIcons";
 import { Gallery } from "./Gallery";
+import { HeroMedia } from "./HeroMedia";
 import { DownloadPanel, History } from "./Downloads";
 import { DownloadLink, Eyebrow } from "./ui";
-import { useState, useRef } from "react";
+import { AnimatedHover } from "./AnimatedIcon";
+import notificationAnimation from "react-useanimations/lib/notification";
+import { useState, useRef, useLayoutEffect, useEffect } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -14,8 +17,9 @@ import {
   MapPin,
   Route,
   BellRing,
-  Heart,
+  Bus,
   BusFront,
+  Heart,
   TrainFront,
   Radio,
   ChevronRight,
@@ -53,6 +57,36 @@ function Phone({
 }
 function Header({ release }: { release?: Release }) {
   const [open, setOpen] = useState(false);
+  const [line, setLine] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    visible: false,
+  });
+  const nav = useRef<HTMLElement>(null);
+  const moveLine = (link: HTMLAnchorElement, visible = true) => {
+    const bar = nav.current?.getBoundingClientRect();
+    if (!bar) return;
+    const rect = link.getBoundingClientRect();
+    setLine({
+      left: rect.left - bar.left,
+      top: rect.bottom - bar.top + 4,
+      width: rect.width,
+      visible,
+    });
+  };
+  const hideLine = () =>
+    setLine((current) =>
+      current.visible ? { ...current, visible: false } : current,
+    );
+  useLayoutEffect(() => {
+    const first = nav.current?.querySelector<HTMLAnchorElement>('a[href^="#"]');
+    if (first) moveLine(first, false);
+  }, []);
+  useEffect(() => {
+    window.addEventListener("resize", hideLine);
+    return () => window.removeEventListener("resize", hideLine);
+  }, []);
   return (
     <header>
       <a className="brand" href="#inicio" aria-label="NoPonto, início">
@@ -71,15 +105,78 @@ function Header({ release }: { release?: Release }) {
       <Preferences />
       <nav
         id="navigation"
+        ref={nav}
         className={open ? "open" : ""}
         onClick={() => setOpen(false)}
+        onPointerLeave={hideLine}
+        onPointerOver={(event) => {
+          if ((event.target as Element).closest("a.button")) hideLine();
+        }}
+        onBlur={(event) => {
+          const next = event.relatedTarget as Element | null;
+          if (!event.currentTarget.contains(next) || next?.closest(".button"))
+            hideLine();
+        }}
       >
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#rotinas">Rotinas</a>
-        <a href="#perfil">Perfil</a>
-        <a href="#aplicativo">O aplicativo</a>
-        <a href="#novidades">Novidades</a>
-        <a href="#codigo">Código aberto</a>
+        <span
+          className={`nav-underline ${line.visible ? "visible" : ""}`}
+          style={{ left: line.left, top: line.top, width: line.width }}
+          aria-hidden="true"
+        />
+        <a
+          href="#funcionalidades"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          Funcionalidades
+        </a>
+        <a
+          href="#rotinas"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          Rotinas
+        </a>
+        <a
+          href="#perfil"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          Perfil
+        </a>
+        <a
+          href="#aplicativo"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          O aplicativo
+        </a>
+        <a
+          href="#novidades"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          Novidades
+        </a>
+        <a
+          href="#codigo"
+          onPointerEnter={(event) => {
+            if (event.pointerType === "mouse") moveLine(event.currentTarget);
+          }}
+          onFocus={(event) => moveLine(event.currentTarget)}
+        >
+          Código aberto
+        </a>
         <DownloadLink release={release} />
       </nav>
     </header>
@@ -152,11 +249,7 @@ function Hero({ release }: { release?: Release }) {
           <span className="live-dot" /> Seu próximo movimento começa aqui.
         </div>
         <div className="hero-phone">
-          <Phone
-            id="004"
-            alt="Mapa real do NoPonto com itinerários e veículos no Rio"
-            priority
-          />
+          <HeroMedia />
         </div>
         <div className="floating arrival">
           <span className="icon-tile">
@@ -197,7 +290,7 @@ function Modals() {
       "02",
       "BRT",
       "Linhas e acompanhamento sujeitos à integração de cada fonte.",
-      BrtIcon,
+      Bus,
       "Integração parcial",
     ],
     [
@@ -369,10 +462,19 @@ function Radar() {
             />
           </div>
           <div className="notification-stack">
-            <span className="notification-label">
-              <BellRing className="animate-bell" size={16} /> O AVISO CHEGA ATÉ
-              VOCÊ
-            </span>
+            <AnimatedHover
+              animation={notificationAnimation}
+              className="animate-bell"
+              interaction="hover-replay"
+              size={16}
+              fallback={<BellRing size={16} />}
+            >
+              {(icon, eventProps) => (
+                <span {...eventProps} className="notification-label">
+                  {icon} O AVISO CHEGA ATÉ VOCÊ
+                </span>
+              )}
+            </AnimatedHover>
             <img
               src={asset("011.webp")}
               width="1080"
