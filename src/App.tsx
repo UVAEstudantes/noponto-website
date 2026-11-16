@@ -1,3 +1,6 @@
+import { Preferences } from "./SitePreferences";
+import { Routines, Profile } from "./Editorial";
+import { BrtIcon, MetroIcon } from "./ModalIcons";
 import { Gallery } from "./Gallery";
 import { DownloadPanel, History } from "./Downloads";
 import { DownloadLink, Eyebrow } from "./ui";
@@ -65,12 +68,15 @@ function Header({ release }: { release?: Release }) {
       >
         {open ? <X /> : <Menu />}
       </button>
+      <Preferences />
       <nav
         id="navigation"
         className={open ? "open" : ""}
         onClick={() => setOpen(false)}
       >
         <a href="#funcionalidades">Funcionalidades</a>
+        <a href="#rotinas">Rotinas</a>
+        <a href="#perfil">Perfil</a>
         <a href="#aplicativo">O aplicativo</a>
         <a href="#novidades">Novidades</a>
         <a href="#codigo">Código aberto</a>
@@ -107,7 +113,7 @@ function Hero({ release }: { release?: Release }) {
           </a>
         </div>
         <p className="small muted">
-          Android · Versão beta · Feito no Rio de Janeiro
+          Disponível atualmente para Android · Versão Beta
         </p>
       </div>
       <div className="hero-stage">
@@ -154,7 +160,7 @@ function Hero({ release }: { release?: Release }) {
         </div>
         <div className="floating arrival">
           <span className="icon-tile">
-            <MapPin size={21} />
+            <MapPin className="animate-pin" size={21} />
           </span>
           <div>
             <strong>O seu ponto de partida.</strong>
@@ -191,7 +197,7 @@ function Modals() {
       "02",
       "BRT",
       "Linhas e acompanhamento sujeitos à integração de cada fonte.",
-      BusFront,
+      BrtIcon,
       "Integração parcial",
     ],
     [
@@ -205,7 +211,7 @@ function Modals() {
       "04",
       "Metrô",
       "Parte da proposta multimodal. Integração operacional em evolução.",
-      TrainFront,
+      MetroIcon,
       "Em evolução",
     ],
   ] as const;
@@ -364,7 +370,8 @@ function Radar() {
           </div>
           <div className="notification-stack">
             <span className="notification-label">
-              <BellRing size={16} /> O AVISO CHEGA ATÉ VOCÊ
+              <BellRing className="animate-bell" size={16} /> O AVISO CHEGA ATÉ
+              VOCÊ
             </span>
             <img
               src={asset("011.webp")}
@@ -483,6 +490,8 @@ export default function App() {
         <Modals />
         <Features />
         <Radar />
+        <Routines />
+        <Profile />
         <Gallery />
         <Future />
         <DownloadPanel release={release} loading={loading} error={error} />

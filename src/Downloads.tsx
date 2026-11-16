@@ -24,9 +24,10 @@ export function DownloadPanel({
             com você.
           </h2>
           <p>
-            Disponível como APK para Android.
+            Exclusivo para dispositivos Android.
             <br />
-            Ainda fora da Play Store, já perto do seu caminho.
+            Instalação por APK (arquivo do aplicativo), fora da Play Store.
+            Ainda não há versão para iOS.
           </p>
           {loading ? (
             <p role="status">Consultando a versão mais recente…</p>
