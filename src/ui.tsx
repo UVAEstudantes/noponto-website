@@ -1,6 +1,6 @@
 import { Download, ArrowUpRight } from "lucide-react";
 import downloadAnimation from "react-useanimations/lib/download";
-import { AnimatedIcon } from "./AnimatedIcon";
+import { AnimatedHover } from "./AnimatedIcon";
 import type { Release } from "./releases";
 export function DownloadLink({
   release,
@@ -10,16 +10,24 @@ export function DownloadLink({
   className?: string;
 }) {
   return (
-    <a className={className} href={release?.apk.url || "#download"}>
-      <AnimatedIcon
-        animation={downloadAnimation}
-        interaction="hover"
-        size={18}
-        fallback={<Download size={18} />}
-      />
-      Baixar para Android
-      <ArrowUpRight size={17} />
-    </a>
+    <AnimatedHover
+      animation={downloadAnimation}
+      interaction="hover"
+      size={18}
+      fallback={<Download size={18} />}
+    >
+      {(icon, eventProps) => (
+        <a
+          {...eventProps}
+          className={className}
+          href={release?.apk.url || "#download"}
+        >
+          {icon}
+          Baixar para Android
+          <ArrowUpRight size={17} />
+        </a>
+      )}
+    </AnimatedHover>
   );
 }
 export function Eyebrow({ children }: { children: React.ReactNode }) {

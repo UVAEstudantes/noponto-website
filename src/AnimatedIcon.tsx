@@ -1,6 +1,12 @@
-import { useSyncExternalStore, type ReactNode } from "react";
+import {
+  useSyncExternalStore,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import UseAnimations, {
-  type UseAnimationsProps,
+  type Animation,
+  type EventProps,
+  type Interaction,
 } from "react-useanimations";
 
 function subscribe(callback: () => void) {
@@ -16,24 +22,45 @@ function isReduced() {
   return document.documentElement.dataset.motion === "reduce";
 }
 
-export function AnimatedIcon({
+export function AnimatedHover({
+  animation,
+  interaction,
+  size = 24,
   fallback,
   className = "",
-  ...props
-}: UseAnimationsProps & { fallback: ReactNode }) {
+  children,
+}: {
+  animation: Animation;
+  interaction?: Interaction;
+  size?: number;
+  fallback: ReactNode;
+  className?: string;
+  children: (icon: ReactElement, eventProps: EventProps) => ReactElement;
+}) {
   const reduced = useSyncExternalStore(subscribe, isReduced, () => false);
-  if (reduced) {
-    return (
-      <span className={`animated-icon ${className}`} aria-hidden="true">
-        {fallback}
-      </span>
-    );
-  }
+  const fallbackIcon = (
+    <span className={`animated-icon ${className}`} aria-hidden="true">
+      {fallback}
+    </span>
+  );
+
+  if (reduced) return children(fallbackIcon, {} as EventProps);
+
   return (
     <UseAnimations
-      {...props}
-      className={`animated-icon ${className}`}
-      aria-hidden="true"
+      animation={animation}
+      interaction={interaction}
+      size={size}
+      render={(eventProps, animationProps) =>
+        children(
+          <span
+            {...animationProps}
+            className={`animated-icon ${className}`}
+            aria-hidden="true"
+          />,
+          eventProps,
+        )
+      }
     />
   );
 }

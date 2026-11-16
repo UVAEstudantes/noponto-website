@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, Maximize2, X } from "lucide-react";
 import maximize2 from "react-useanimations/lib/maximize2";
-import { AnimatedIcon } from "./AnimatedIcon";
+import { AnimatedHover } from "./AnimatedIcon";
 import { asset, screenshots } from "./content";
 import { Eyebrow } from "./ui";
 import { placePreview } from "./galleryLayout";
@@ -89,43 +89,49 @@ export function Gallery() {
       </div>
       <div className="gallery-track">
         {screenshots.map(([id, title, description], i) => (
-          <button
-            className={`gallery-item ${Number(id) > 10 ? "wide-shot" : ""}`}
+          <AnimatedHover
             key={id}
-            onPointerEnter={(event) => openPreview(event, i)}
-            onPointerLeave={(event) => {
-              if (event.pointerType === "mouse") closePreview();
-            }}
-            onClick={() => {
-              dismissPreview();
-              setSelected(i);
-              dialog.current?.showModal();
-            }}
-            aria-label={`Ampliar: ${title}`}
+            animation={maximize2}
+            interaction="hover-replay"
+            size={20}
+            fallback={<Maximize2 size={20} />}
           >
-            <div className="gallery-image">
-              <img
-                src={asset(`${id}.webp`)}
-                width="540"
-                height="1200"
-                loading="lazy"
-                alt={description}
-              />
-              <span>
-                <AnimatedIcon
-                  animation={maximize2}
-                  interaction="hover-replay"
-                  size={20}
-                  fallback={<Maximize2 size={20} />}
-                />
-              </span>
-            </div>
-            <span className="gallery-index">
-              {String(i + 1).padStart(2, "0")} / APLICATIVO
-            </span>
-            <strong>{title}</strong>
-            <p>{description}</p>
-          </button>
+            {(icon, eventProps) => (
+              <button
+                {...eventProps}
+                className={`gallery-item ${Number(id) > 10 ? "wide-shot" : ""}`}
+                onPointerEnter={(event) => {
+                  eventProps.onPointerEnter?.(event);
+                  openPreview(event, i);
+                }}
+                onPointerLeave={(event) => {
+                  if (event.pointerType === "mouse") closePreview();
+                }}
+                onClick={() => {
+                  dismissPreview();
+                  setSelected(i);
+                  dialog.current?.showModal();
+                }}
+                aria-label={`Ampliar: ${title}`}
+              >
+                <div className="gallery-image">
+                  <img
+                    src={asset(`${id}.webp`)}
+                    width="540"
+                    height="1200"
+                    loading="lazy"
+                    alt={description}
+                  />
+                  <span>{icon}</span>
+                </div>
+                <span className="gallery-index">
+                  {String(i + 1).padStart(2, "0")} / APLICATIVO
+                </span>
+                <strong>{title}</strong>
+                <p>{description}</p>
+              </button>
+            )}
+          </AnimatedHover>
         ))}
       </div>
       <div className="gallery-bottom">
